@@ -13,7 +13,7 @@ module regfile(
 
     //写端口
     input   wire[`RegAddrBus]   waddr,
-    input   wire['RegBus]       wdata,
+    input   wire[`RegBus]       wdata,
     input   wire                we,
 
     input   wire                clk,
@@ -21,13 +21,13 @@ module regfile(
 );
 
 //定义32个32位寄存器
-    reg[`RegBus]    regs[0:RegNum-1];
+    reg[`RegBus]    regs[0:`RegNum-1];
 
 //写操作
     always @ (posedge clk) begin
         if (rst == `RstDisable) begin
             if ((we == `WriteEnable) && (waddr != `RegNumLog2'h0)) begin
-                reg[waddr] <= wdata;
+                regs[waddr] <= wdata;
             end
         end
     end
@@ -42,7 +42,7 @@ module regfile(
                 rdata1 <= `ZeroWord;
             end
             else 
-                if(raddr1 == waddr) && (we == `WriteEnable) && (re1 == `ReadEnable) begin
+                if((raddr1 == waddr) && (we == `WriteEnable) && (re1 == `ReadEnable)) begin
                     rdata1 <= wdata;
                 end
                 else
@@ -63,7 +63,7 @@ module regfile(
                 rdata2 <= `ZeroWord;
             end
             else 
-                if(raddr2 == waddr) && (we == `WriteEnable) && (re2 == `ReadEnable) begin
+                if((raddr2 == waddr) && (we == `WriteEnable) && (re2 == `ReadEnable)) begin
                     rdata2 <= wdata;
                 end
                 else

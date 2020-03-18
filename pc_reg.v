@@ -4,12 +4,12 @@ module pc_reg(
     input wire rst,
     input wire clk,
 
-    output reg[InstAddrBus] pc,
+    output reg[`InstAddrBus] pc,
     output reg ce
 );
 
 always @ (posedge clk) begin        //复位时禁用指令储存器
-    if (rst == 'RstEnable) begin
+    if (rst == `RstEnable) begin
         ce <= `ChipDisable;
     end
     else begin

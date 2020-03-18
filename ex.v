@@ -1,4 +1,4 @@
-`include "precomplied.v"
+`include "precompiled.v"
 
 module ex(
     input wire rst,
@@ -25,7 +25,7 @@ module ex(
         if (rst == `RstEnable) begin
             logicout <= `ZeroWord;
         end else begin
-            case (aliop_i)
+            case (aluop_i)
                 `EXE_OR_OP: begin
                     logicout <= reg1_i | reg2_i;
                 end
@@ -49,3 +49,5 @@ module ex(
             end
         endcase
     end
+
+endmodule

@@ -6,7 +6,7 @@
 
 //Regfile
 `define RegAddrBus      4:0                 //Regfile地址线宽度
-`define RegBus          32:0                //Regfile数据线宽度
+`define RegBus          31:0                //Regfile数据线宽度
 `define RegNum          32                  //32位寄存器的数量
 `define RegNumLog2      5                   //寻址寄存器地址宽度
 `define NOPRegAddr      5'b00000
@@ -41,4 +41,4 @@
 
 
 //*常用值定义
-`define ZeroWord        32h'00000000        //32位的数值0
+`define ZeroWord        32'h00000000        //32位的数值0

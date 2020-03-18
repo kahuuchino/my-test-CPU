@@ -1,8 +1,8 @@
 `include "precompiled.v"
 
 module ex_mem(
-    input wire rst;
-    input wire clk;
+    input wire rst,
+    input wire clk,
 
     input wire[`RegAddrBus] ex_wd,
     input wire              ex_wreg,

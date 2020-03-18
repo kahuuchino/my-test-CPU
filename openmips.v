@@ -5,8 +5,8 @@ module openmips(
     input wire rst,
     
     input   wire[`RegBus]   rom_data_i,
-    output  reg[`RegBus]    rom_addr_o, 
-    output  reg             rom_ce_o
+    output  wire[`RegBus]   rom_addr_o, 
+    output  wire            rom_ce_o
 );
 
     //*连接if/id与id
@@ -19,7 +19,7 @@ module openmips(
     wire[`AluSelBus]    id_alusel_o;
     wire[`RegBus]       id_reg1_o;
     wire[`RegBus]       id_reg2_o;
-    wire[`RegAbbrBus]   id_wd_o;
+    wire[`RegAddrBus]   id_wd_o;
     wire                id_wreg_o;
 
     //*连接id/ex与ex
@@ -27,7 +27,7 @@ module openmips(
     wire[`AluSelBus]    ex_alusel_i;
     wire[`RegBus]       ex_reg1_i;
     wire[`RegBus]       ex_reg2_i;
-    wire[`RegAbbrBus]   ex_wd_i;
+    wire[`RegAddrBus]   ex_wd_i;
     wire                ex_wreg_i;
 
     //*连接ex与ex/mem
@@ -115,7 +115,7 @@ module openmips(
 
         .rdata2(reg2_data),
         .raddr2(reg2_addr),
-        .re2(reg2_read),
+        .re2(reg2_read)
     );
 
     //*实例化id/ex
@@ -128,7 +128,7 @@ module openmips(
         .id_reg1(id_reg1_o),
         .id_reg2(id_reg2_o),
         .id_wd(id_wd_o),
-        .id_wreg(id_wreg_o)
+        .id_wreg(id_wreg_o),
 
         .ex_aluop(ex_aluop_i),
         .ex_alusel(ex_alusel_i),
@@ -147,7 +147,7 @@ module openmips(
         .reg1_i(ex_reg1_i),
         .reg2_i(ex_reg2_i),
         .wd_i(ex_wd_i),
-        .wreg_i(ex_wreg_1),
+        .wreg_i(ex_wreg_i),
 
         .wd_o(ex_wd_o),
         .wreg_o(ex_wreg_o),

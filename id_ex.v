@@ -9,7 +9,7 @@ module id_ex(
     input wire[`AluSelBus]  id_alusel,
     input wire[`RegBus]     id_reg1,
     input wire[`RegBus]     id_reg2,
-    input wire[`RegAbbrBus] id_wd,
+    input wire[`RegAddrBus] id_wd,
     input wire              id_wreg,
 
     //送入执行阶段的信息
@@ -17,8 +17,8 @@ module id_ex(
     output reg[`AluSelBus]  ex_alusel,
     output reg[`RegBus]     ex_reg1,
     output reg[`RegBus]     ex_reg2,
-    output reg[`RegAbbrBus] ex_wd,
-    output reg              ex_wreg,
+    output reg[`RegAddrBus] ex_wd,
+    output reg              ex_wreg
 );
 
     always @ (posedge clk)  begin
@@ -38,3 +38,5 @@ module id_ex(
             ex_wreg     <=  id_wreg;
         end
     end
+
+endmodule

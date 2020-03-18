@@ -14,7 +14,7 @@ module inst_rom(
         if(ce == `ChipDisable) begin
             inst <= `ZeroWord;
         end else begin
-            inst <= inst_mem[`InstMemNumLog2+1:2];
+            inst <= inst_mem[addr[`InstMemNumLog2+1:2]];
         end
     end
 

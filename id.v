@@ -1,4 +1,4 @@
-`include "precompiled.h"
+`include "precompiled.v"
 
 module id(
     input wire                  rst,
@@ -34,7 +34,7 @@ module id(
     reg[`RegBus] imm;
 
 //指令是否有效标志位
-    reg insvalid;
+    reg instvalid;
 
 
 //对指令进行译码
@@ -44,36 +44,36 @@ module id(
             alusel_o    <=  `EXE_RES_NOP;
             wd_o        <=  `NOPRegAddr;
             wreg        <=  `WriteDisable;
-            instvaild   <=  `InstVaild;
-            reg1_read_o <=  `1'b0;
-            reg2_read_o <=  `1'b0;
+            instvalid   <=  `InstVaild;
+            reg1_read_o <=  1'b0;
+            reg2_read_o <=  1'b0;
             reg1_addr_o <=  `NOPRegAddr;
             reg2_addr_o <=  `NOPRegAddr;
-            imm         <=  32h'0;
+            imm         <=  32'h0;
         end else begin
             aluop_o     <=  `EXE_NOP_OP;
             alusel_o    <=  `EXE_RES_NOP;
             wd_o        <=  inst_i[15:11];
             wreg        <=  `WriteDisable;
-            instvaild   <=  `InstVaild;
-            reg1_read_o <=  `1'b0;
-            reg2_read_o <=  `1'b0;
+            instvalid   <=  `InstVaild;
+            reg1_read_o <=  1'b0;
+            reg2_read_o <=  1'b0;
             reg1_addr_o <=  inst_i[25:21];
             reg2_addr_o <=  inst_i[20:16];
-            imm         <=  32h'0;
+            imm         <=  32'h0;
         end
     
 
         case(op)
             `EXE_ORI:   begin
-                wreg_o      <=  `WriteEnable;           //指令需要写入寄存器
+                wreg      <=  `WriteEnable;           //指令需要写入寄存器
                 aluop_o     <=  `EXE_OR_OP;             //指令子类型为或
                 alusel_o    <=  `EXE_RES_LOGIC;         //指令类型为逻辑运算
-                reg1_read_o <=  1b'1;                   //使用读端口1
-                reg2_read_o <=  1b'0;                   //不使用读端口2
+                reg1_read_o <=  1'b1;                   //使用读端口1
+                reg2_read_o <=  1'b0;                   //不使用读端口2
                 imm         <=  {16'h0,inst_i[15:0]};   //指令需要的立即数
                 wd_o        <=  inst_i[20:16];          //指令需要的目的寄存器地址
-                instvaild   <=  `InstVaild;             //指令有效
+                instvalid   <=  `InstVaild;             //指令有效
             end
 
             default:    begin

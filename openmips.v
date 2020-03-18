@@ -5,7 +5,7 @@ module openmips(
     input wire rst,
     
     input   wire[`RegBus]   rom_data_i,
-    output  reg[`RegBus]    rom_data_o, 
+    output  reg[`RegBus]    rom_addr_o, 
     output  reg             rom_ce_o
 );
 

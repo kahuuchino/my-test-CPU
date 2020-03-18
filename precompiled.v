@@ -11,7 +11,7 @@
 `define RegNumLog2      5                   //寻址寄存器地址宽度
 `define NOPRegAddr      5'b00000
 
-//全局信号定义
+//*全局信号定义
 `define ChipEnable      1'b1                //芯片使能
 `define ChipDisable     1'b0                //芯片禁止
 `define RstEnable       1'b1                //复位有效
@@ -27,18 +27,18 @@
 `define True_v          1'b1                //逻辑为真
 `define False_v         1'b0                //逻辑为假
 
-//具体指令相关
+//*具体指令相关
 `define EXE_ORI         6'b001101           //指令ori的指令码
 `define EXE_NOP         6'b000000           //指令nop（空指令）
 
-//Aluop
+//*Aluop
 `define EXE_OR_OP       8'b00100101
 `define EXE_NOP_OP      8'b00000000
 
-//AluSel
+//*AluSel
 `define EXE_RES_LOGIC   3'b001
 `define EXE_RES_NOP     3'b000
 
 
-//常用值定义
+//*常用值定义
 `define ZeroWord        32h'00000000        //32位的数值0

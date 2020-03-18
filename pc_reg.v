@@ -1,10 +1,11 @@
 `include "precompiled.v"
 
-module PC(
-    output reg[InstAddrBus] pc,
-    output reg ce,
+module pc_reg(
     input wire rst,
-    input wire clk
+    input wire clk,
+
+    output reg[InstAddrBus] pc,
+    output reg ce
 );
 
 always @ (posedge clk) begin        //复位时禁用指令储存器

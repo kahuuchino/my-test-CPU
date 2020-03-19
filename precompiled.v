@@ -27,9 +27,30 @@
 `define True_v          1'b1                //逻辑为真
 `define False_v         1'b0                //逻辑为假
 
-//*具体指令相关
-`define EXE_ORI         6'b001101           //指令ori的指令码
+//*指令码
+//逻辑运算指令
 `define EXE_NOP         6'b000000           //指令nop（空指令）
+`define EXE_AND         6'b100100           //指令and
+`define EXE_OR          6'b100101
+`define EXE_XOR         6'b100110
+`define EXE_NOR         6'b100111
+`define EXE_ANDI        6'b001100
+`define EXE_ORI         6'b001101
+`define EXE_XORI        6'b001110
+`define EXE_LUI         6'b001111
+
+//移位运算指令
+`define EXE_SLL         6'b000000
+`define EXE_SLLV        6'b000100
+`define EXE_SRL         6'b000010
+`define EXE_SRLV        6'b000110
+`define EXE_SRA         6'b000011
+`define EXE_SRAV        6'b000111
+
+//特殊指令
+`define EXE_SYNC        6'b001111
+`define EXE_PREF        6'b110011
+`define EXE_SPECIAL_INST 6'b000000
 
 //*Aluop
 `define EXE_OR_OP       8'b00100101

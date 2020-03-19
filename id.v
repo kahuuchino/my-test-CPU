@@ -94,6 +94,11 @@ module id(
     end
 
 //确定源操作数1
+/*
+若有复位信号，则操作数为0
+若read_o为真，则输出寄存器地址
+若read_o为假，则输出立即数
+*/
     always @ (*)    begin
         if(rst == `RstEnable)   begin
             reg1_o <= `ZeroWord;

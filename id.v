@@ -36,10 +36,10 @@ module id(
 );  
 
 //取得指令码
-    wire[5:0] op  = inst_i[31:26];
-    wire[4:0] op2 = inst_i[10:6];
-    wire[5:0] op3 = inst_i[5:0];
-    wire[4:0] op4 = inst_i[20:16];
+    wire[5:0] op  = inst_i[31:26];      //指令码
+    wire[4:0] op2 = inst_i[10:6];       //移位指令所需的移位位数
+    wire[5:0] op3 = inst_i[5:0];        //功能码
+    wire[4:0] op4 = inst_i[20:16];      //指令指定参与计算的寄存器
 
 //保存指令执行的立即数
     reg[`RegBus] imm;
@@ -76,6 +76,94 @@ module id(
     
 
         case(op)
+            `EXE_SPECIAL_INST: begin
+                case (op2)
+                    5'b00000:   begin
+                        case (op3) begin
+
+                            `EXE_OR:   begin    //指令OR
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_OR_OP;  
+                                alusel_o    <=  `EXE_RES_LOGIC;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            `EXE_AND:   begin    
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_AND_OP;  
+                                alusel_o    <=  `EXE_RES_LOGIC;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            `EXE_XOR:   begin    
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_XOR_OP;  
+                                alusel_o    <=  `EXE_RES_LOGIC;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            `EXE_NOR:   begin    
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_NOR_OP;  
+                                alusel_o    <=  `EXE_RES_LOGIC;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            `EXE_SLLV:   begin    
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_SLLV_OP;  
+                                alusel_o    <=  `EXE_RES_SHIFT;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            `EXE_SLRV:   begin    
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_SLRV_OP;  
+                                alusel_o    <=  `EXE_RES_SHIFT;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            `EXE_SRAV:   begin    
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_SRAV_OP;  
+                                alusel_o    <=  `EXE_RES_SHIFT;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            `EXE_SYNC:   begin    
+                                wreg      <=  `WriteEnable;
+                                aluop_o     <=  `EXE_SYNC_OP;  
+                                alusel_o    <=  `EXE_RES_NOP;
+                                reg1_read_o <=  1'b1;
+                                reg2_read_o <=  1'b1;
+                                instvalid   <=  `InstVaild;
+                            end
+
+                            default:    begin
+                                
+                            end
+                        endcase //case op3
+                    end
+                    default:    begin
+                        
+                    end
+                endcase //case op2
+            end
+
             `EXE_ORI:   begin
                 wreg      <=  `WriteEnable;           //指令需要写入寄存器
                 aluop_o     <=  `EXE_OR_OP;             //指令子类型为或
@@ -87,11 +175,57 @@ module id(
                 instvalid   <=  `InstVaild;             //指令有效
             end
 
+            `EXE_ANDI:   begin
+                wreg      <=  `WriteEnable;
+                aluop_o     <=  `EXE_AND_OP;
+                alusel_o    <=  `EXE_RES_LOGIC;
+                reg1_read_o <=  1'b1;
+                reg2_read_o <=  1'b0;
+                imm         <=  {16'h0,inst_i[15:0]};
+                wd_o        <=  inst_i[20:16];
+                instvalid   <=  `InstVaild;
+            end
+
+            `EXE_XORI:   begin
+                wreg      <=  `WriteEnable;
+                aluop_o     <=  `EXE_XOR_OP;
+                alusel_o    <=  `EXE_RES_LOGIC;
+                reg1_read_o <=  1'b1;
+                reg2_read_o <=  1'b0;
+                imm         <=  {16'h0,inst_i[15:0]};
+                wd_o        <=  inst_i[20:16];
+                instvalid   <=  `InstVaild;
+            end
+            
+            `EXE_LUI:   begin
+                wreg      <=  `WriteEnable;
+                aluop_o     <=  `EXE_OR_OP;
+                alusel_o    <=  `EXE_RES_LOGIC;
+                reg1_read_o <=  1'b1;
+                reg2_read_o <=  1'b0;
+                imm         <=  {inst_i[15:0],16'h0};
+                wd_o        <=  inst_i[20:16];
+                instvalid   <=  `InstVaild;
+            end
+
+            `EXE_PREF:   begin
+                wreg      <=  `WriteEnable;
+                aluop_o     <=  `EXE_NOP_OP;
+                alusel_o    <=  `EXE_RES_NOP;
+                reg1_read_o <=  1'b0;
+                reg2_read_o <=  1'b0;
+                imm         <=  {16'h0,inst_i[15:0]};
+                wd_o        <=  inst_i[20:16];
+                instvalid   <=  `InstVaild;
+            end
             default:    begin
                 
             end
-        endcase
+        endcase //case op
+
+        //TODO:加入循环移位指令
     end
+
 
 //确定源操作数1
 /*

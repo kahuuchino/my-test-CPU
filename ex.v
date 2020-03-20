@@ -19,6 +19,8 @@ module ex(
 
     //保存逻辑运算的结果
     reg[`RegBus] logicout;
+    //保存移位运算的结果
+    reg[`RegBus] shiftres;
 
 //根据aluop_i进行运算
     always @ (*) begin
@@ -26,12 +28,42 @@ module ex(
             logicout <= `ZeroWord;
         end else begin
             case (aluop_i)
-                `EXE_OR_OP: begin
+                `EXE_OR_OP:     begin
                     logicout <= reg1_i | reg2_i;
+                end
+                `EXE_AND_OP:    begin
+                    logicout <= reg1_i & reg2_i;
+                end
+                `EXE_XOR_OP:    begin
+                    logicout <= reg1_i ^ reg2_i;
+                end
+                `EXE_NOR_OP:    begin
+                    logicout <= ~(reg1_i | reg2_i);
                 end
                 default:    begin
                     logicout <= `ZeroWord;
                 end
+            endcase
+        end
+    end
+
+    always @ (*) begin
+        if (rst == `RstEnable) begin
+            shiftres <= `ZeroWord;
+        end else begin
+            case (alu_op)
+                `EXE_SLL_OP:    begin
+                    shiftres <= reg2_i << reg1_i[4:0];
+                end 
+                `EXE_SRL_OP:    begin
+                    shiftres <= reg2_i >> reg1_i[4:0];
+                end 
+                `EXE_SRA_OP:    begin   //算术右移
+                    shiftres <= ({32{reg2_i[31]}} << (6'd32-{1b'0,reg1_i[4:0]})) | reg2_i >> reg1_i[4:0];
+                end 
+                default:    begin
+                    shiftres <= `ZeroWord;
+                end 
             endcase
         end
     end
@@ -43,6 +75,9 @@ module ex(
         case (alusel_i)
             `EXE_RES_LOGIC: begin
                 wdata_o <=  logicout;
+            end
+            `EXE_RES_SHIFT: begin
+                wdata_o <=  shiftres;
             end
             default:    begin
                 wdata_o <=  `ZeroWord;

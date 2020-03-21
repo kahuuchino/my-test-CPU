@@ -23,32 +23,32 @@ module id(
     output reg[`RegAddrBus]     wd_o,
     output reg                  wreg,
 
-    //TODO:增加处理流水线数据冲突端口
-    //位于执行阶段的运算结果
+    //TODO:增加处理流水线数据冲突端�?
+    //位于执行阶段的运算结�?
     input   wire                ex_wreg_i,
     input   wire[`RegBus]       ex_wdata_i,
     input   wire[`RegAddrBus]   ex_wd_i,
 
-    //位于访存阶段的运算结果
+    //位于访存阶段的运算结�?
     input   wire                mem_wreg_i,
     input   wire[`RegBus]       mem_wdata_i,
-    input   wire[`RegAddrBus]   mem_wd_i,
-);  
+    input   wire[`RegAddrBus]   mem_wd_i
+);
 
-//取得指令码
-    wire[5:0] op  = inst_i[31:26];      //指令码
-    wire[4:0] op2 = inst_i[10:6];       //移位指令所需的移位位数
-    wire[5:0] op3 = inst_i[5:0];        //功能码
+//取得指令�?
+    wire[5:0] op  = inst_i[31:26];      //指令�?
+    wire[4:0] op2 = inst_i[10:6];       //移位指令所需的移位位�?
+    wire[5:0] op3 = inst_i[5:0];        //功能�?
     wire[4:0] op4 = inst_i[20:16];      //指令指定参与计算的寄存器
 
 //保存指令执行的立即数
     reg[`RegBus] imm;
 
-//指令是否有效标志位
+//指令是否有效标志�?
     reg instvalid;
 
 
-//对指令进行译码
+//对指令进行译�?
     always @ (*)    begin
         if(rst == `RstEnable) begin
             aluop_o     <=  `EXE_NOP_OP;
@@ -77,7 +77,7 @@ module id(
                 `EXE_SPECIAL_INST: begin
                     case (op2)
                         5'b00000:   begin
-                            case (op3) begin
+                            case (op3)
 
                                 `EXE_OR:   begin    //指令OR
                                     wreg        <=  `WriteEnable;
@@ -124,9 +124,9 @@ module id(
                                     instvalid   <=  `InstVaild;
                                 end
 
-                                `EXE_SLRV:   begin    
+                                `EXE_SRLV:   begin
                                     wreg        <=  `WriteEnable;
-                                    aluop_o     <=  `EXE_SLRV_OP;  
+                                    aluop_o     <=  `EXE_SRLV_OP;
                                     alusel_o    <=  `EXE_RES_SHIFT;
                                     reg1_read_o <=  1'b1;
                                     reg2_read_o <=  1'b1;
@@ -144,7 +144,7 @@ module id(
 
                                 `EXE_SYNC:   begin    
                                     wreg        <=  `WriteDisable;
-                                    aluop_o     <=  `EXE_SYNC_OP;  
+                                    aluop_o     <=  `EXE_NOP_OP;
                                     alusel_o    <=  `EXE_RES_NOP;
                                     reg1_read_o <=  1'b1;
                                     reg2_read_o <=  1'b1;
@@ -164,11 +164,11 @@ module id(
 
                 `EXE_ORI:   begin
                     wreg        <=  `WriteEnable;           //指令需要写入寄存器
-                    aluop_o     <=  `EXE_OR_OP;             //指令子类型为或
+                    aluop_o     <=  `EXE_OR_OP;             //指令子类型为�?
                     alusel_o    <=  `EXE_RES_LOGIC;         //指令类型为逻辑运算
-                    reg1_read_o <=  1'b1;                   //使用读端口1
+                    reg1_read_o <=  1'b1;                   //使用读端�?
                     reg2_read_o <=  1'b0;                   //不使用读端口2
-                    imm         <=  {16'h0,inst_i[15:0]};   //指令需要的立即数
+                    imm         <=  {16'h0,inst_i[15:0]};   //指令需要的立即�?
                     wd_o        <=  inst_i[20:16];          //指令需要的目的寄存器地址
                     instvalid   <=  `InstVaild;             //指令有效
                 end
@@ -197,7 +197,7 @@ module id(
                 
                 `EXE_LUI:   begin
                     wreg        <=  `WriteEnable;
-                    aluop_o     <=  `EXE_OR_OP;             //LUI视作立即数左移16位后与寄存器相或
+                    aluop_o     <=  `EXE_OR_OP;             //LUI视作立即数左�?6位后与寄存器相或
                     alusel_o    <=  `EXE_RES_LOGIC;
                     reg1_read_o <=  1'b1;
                     reg2_read_o <=  1'b0;
@@ -207,7 +207,7 @@ module id(
                 end
 
                 `EXE_PREF:   begin
-                    wreg        <=  `WriteDIsable;
+                    wreg        <=  `WriteDisable;
                     aluop_o     <=  `EXE_NOP_OP;
                     alusel_o    <=  `EXE_RES_NOP;
                     reg1_read_o <=  1'b0;
@@ -261,12 +261,12 @@ module id(
 /*
 若有复位信号，则操作数为0
 若read_o为真，则输出寄存器地址
-若read_o为假，则输出立即数
+若read_o为假，则输出立即�?
 */
     always @ (*)    begin
         if(rst == `RstEnable)   begin
             reg1_o <= `ZeroWord;
-        //增加对执行和访存阶段结果的直接访问
+        //增加对执行和访存阶段结果的直接访�?
         end else if ((reg1_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg1_read_o)) begin
             reg1_o <= ex_wdata_i;
         end else if ((reg1_read_o == 1'b1) && (mem_wreg_i == 1'b1) && (mem_wd_i == reg1_read_o)) begin
@@ -285,7 +285,7 @@ module id(
     always @ (*)    begin
         if(rst == `RstEnable)   begin
             reg2_o <= `ZeroWord;
-         //增加对执行和访存阶段结果的直接访问
+         //增加对执行和访存阶段结果的直接访�?
         end else if ((reg2_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg2_read_o)) begin
             reg2_o <= ex_wdata_i;
         end else if ((reg2_read_o == 1'b1) && (mem_wreg_i == 1'b1) && (mem_wd_i == reg2_read_o)) begin

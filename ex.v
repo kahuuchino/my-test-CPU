@@ -51,7 +51,7 @@ module ex(
         if (rst == `RstEnable) begin
             shiftres <= `ZeroWord;
         end else begin
-            case (alu_op)
+            case (aluop_i)
                 `EXE_SLL_OP:    begin
                     shiftres <= reg2_i << reg1_i[4:0];
                 end 
@@ -59,8 +59,8 @@ module ex(
                     shiftres <= reg2_i >> reg1_i[4:0];
                 end 
                 `EXE_SRA_OP:    begin   //算术右移
-                    shiftres <= ({32{reg2_i[31]}} << (6'd32-{1b'0,reg1_i[4:0]})) | reg2_i >> reg1_i[4:0];
-                end 
+                    shiftres <= ({32{reg2_i[31]}} << (6'd32-{1'b0, reg1_i[4:0]}))
+                                                | reg2_i >> reg1_i[4:0];                end 
                 default:    begin
                     shiftres <= `ZeroWord;
                 end 

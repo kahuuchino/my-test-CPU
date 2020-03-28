@@ -213,6 +213,78 @@ module id(
                                     instvalid   <=  `InstVaild;
                                 end
 
+                                `EXE_SLT:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_SLT_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_SLTU:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_SLTU_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_ADD:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_ADD_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_ADDU:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_ADDU_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_SUB:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_SUB_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_SUBU:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_SUBU_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_MULT:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_MULT_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_MULTU:   begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_MULTU_OP;
+                                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                end
+
                                 default:    begin
                                     
                                 end
@@ -278,6 +350,87 @@ module id(
                     wd_o        <=  inst_i[20:16];
                     instvalid   <=  `InstVaild;
                 end
+
+                `EXE_SLTI:   begin
+                    wreg        <=  `WriteEnable;
+                    aluop_o     <=  `EXE_SLT_OP;
+                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                    reg1_read_o <=  1'b1;
+                    reg2_read_o <=  1'b0;
+                    imm         <=  {16'h0,inst_i[15:0]};
+                    wd_o        <=  inst_i[20:16];
+                    instvalid   <=  `InstVaild;
+                end
+
+                `EXE_SLTIU:   begin
+                    wreg        <=  `WriteEnable;
+                    aluop_o     <=  `EXE_SLTU_OP;
+                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                    reg1_read_o <=  1'b1;
+                    reg2_read_o <=  1'b0;
+                    imm         <=  {16'h0,inst_i[15:0]};
+                    wd_o        <=  inst_i[20:16];
+                    instvalid   <=  `InstVaild;
+                end
+
+                `EXE_ADDI:   begin
+                    wreg        <=  `WriteEnable;
+                    aluop_o     <=  `EXE_ADD_OP;
+                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                    reg1_read_o <=  1'b1;
+                    reg2_read_o <=  1'b0;
+                    imm         <=  {16'h0,inst_i[15:0]};
+                    wd_o        <=  inst_i[20:16];
+                    instvalid   <=  `InstVaild;
+                end
+
+                `EXE_ADDIU:   begin
+                    wreg        <=  `WriteEnable;
+                    aluop_o     <=  `EXE_ADDU_OP;
+                    alusel_o    <=  `EXE_RES_ARITHMETIC;
+                    reg1_read_o <=  1'b1;
+                    reg2_read_o <=  1'b0;
+                    imm         <=  {16'h0,inst_i[15:0]};
+                    wd_o        <=  inst_i[20:16];
+                    instvalid   <=  `InstVaild;
+                end
+
+                `EXE_SPECIAL2_INST: begin
+                    case (op3)
+
+                        `EXE_CLZ:   begin
+                            wreg        <=  `WriteEnable;
+                            aluop_o     <=  `EXE_CLZ_OP;
+                            alusel_o    <=  `EXE_RES_ARITHMETIC;
+                            reg1_read_o <=  1'b1;
+                            reg2_read_o <=  1'b0;
+                            instvalid   <=  `InstVaild;
+                        end 
+
+                        `EXE_CLO:   begin
+                            wreg        <=  `WriteEnable;
+                            aluop_o     <=  `EXE_CLO_OP;
+                            alusel_o    <=  `EXE_RES_ARITHMETIC;
+                            reg1_read_o <=  1'b1;
+                            reg2_read_o <=  1'b0;
+                            instvalid   <=  `InstVaild;
+                        end 
+
+                        `EXE_MUL:   begin
+                            wreg        <=  `WriteEnable;
+                            aluop_o     <=  `EXE_MUL_OP;
+                            alusel_o    <=  `EXE_RES_ARITHMETIC;
+                            reg1_read_o <=  1'b1;
+                            reg2_read_o <=  1'b1;
+                            instvalid   <=  `InstVaild;
+                        end 
+
+                        default: begin
+                            
+                        end
+                    endcase
+                end
+
                 default:    begin
                     
                 end

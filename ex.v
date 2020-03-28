@@ -39,10 +39,38 @@ module ex(
     reg[`RegBus] shiftres;
     //保存移动运算的结果
     reg[`RegBus] moveres;
+    //保存算术运算的结果
+    reg[`RegBus] arithmeticres;
+
     //保存要写入hi寄存器的值
     reg[`RegBus] HI;
     //保存要写入lo寄存器的值
     reg[`RegBus] LO;
+
+    //加法和
+    wire[`RegBus] result_add;
+
+    //溢出标志位
+    wire ov_sum;
+    //两个操作数相等
+    wire reg1_eq_reg2;
+    //第一个小于第二个
+    wire reg1_lt_reg2;
+
+    //操作数1的反码
+    wire[`RegBus] reg1_i_not;
+    //操作数2的补码
+    wire[`RegBus] reg2_i_mux;
+
+    //被乘数
+    wire[`RegBus] opdata1_mult;
+    //乘数
+    wire[`RegBus] opdata2_mult;
+    //临时乘法结果
+    wire[`DoubleRegBus] hilo_temp;
+    //乘法结果
+    wire[`DoubleRegBus] mulres;
+    
 
     always @ (*) begin
         if(rst == `RstEnable) begin
@@ -135,6 +163,24 @@ module ex(
         end
     end
 
+    //*处理算术运算
+
+    //计算reg2补码
+    assign reg2_i_mux = ((aluop_i == `EXE_SUB_OP) || (aluop_i == `EXE_SUBU_OP) || (aluop_i == `EXE_SLT_OP)) 
+                        ? (~reg2_i)+1 
+                        : reg2_i;
+    //计算加法和
+    assign result_add = reg1_i + reg2_i_mux;
+    //计算加法溢出
+    assign ov_sum = ((!reg1_i[31] && !reg2_i[31]) && result_add) || ((reg1_i[31] && reg2_i[31]) && !result_add);
+    //计算操作数1小于操作数2
+    assign reg1_lt_reg2 =   (aluop_i == `EXE_SLT_OP)
+                            ? ((reg1_i[31] && !reg2_i[31]) || (!reg1_i[31] && !reg2_i[31] && result_add[31]) || (reg1_i[31] && reg2_i[31] && result_add[31]))
+                            : (reg1_i < reg2_i);
+    //对操作数1按位取反
+    assign reg1_i_not = ~reg1_i;
+
+//处理hi、lo寄存器
     always @ (*) begin
         if (rst == `RstEnable) begin
             whilo_o <= `WriteDisable;

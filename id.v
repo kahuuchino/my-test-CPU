@@ -151,6 +151,68 @@ module id(
                                     instvalid   <=  `InstVaild;
                                 end
 
+                                `EXE_MOVZ:  begin
+                                    aluop_o     <=  `EXE_MOVZ_OP;
+                                    alusel_o    <=  `EXE_RES_MOVE;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                    if (reg2_o == `ZeroWord) begin
+                                        wreg <= `WriteEnable;
+                                    end else begin
+                                        wreg <= `WriteDisable;
+                                    end
+                                end
+
+                                `EXE_MOVN:  begin
+                                    aluop_o     <=  `EXE_MOVN_OP;
+                                    alusel_o    <=  `EXE_RES_MOVE;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b1;
+                                    instvalid   <=  `InstVaild;
+                                    if (reg2_o != `ZeroWord) begin
+                                        wreg <= `WriteEnable;
+                                    end else begin
+                                        wreg <= `WriteDisable;
+                                    end
+                                end
+
+                                `EXE_MFHI:  begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_MFHI_OP;
+                                    alusel_o    <=  `EXE_RES_MOVE;
+                                    reg1_read_o <=  1'b0;
+                                    reg2_read_o <=  1'b0;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_MFLO:  begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_MFLO_OP;
+                                    alusel_o    <=  `EXE_RES_MOVE;
+                                    reg1_read_o <=  1'b0;
+                                    reg2_read_o <=  1'b0;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_MTHI:  begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_MTHI_OP;
+                                    ////alusel_o    <=  `EXE_RES_MOVE;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b0;
+                                    instvalid   <=  `InstVaild;
+                                end
+
+                                `EXE_MTLO:  begin
+                                    wreg        <=  `WriteEnable;
+                                    aluop_o     <=  `EXE_MTLO_OP;
+                                    ////alusel_o    <=  `EXE_RES_MOVE;
+                                    reg1_read_o <=  1'b1;
+                                    reg2_read_o <=  1'b0;
+                                    instvalid   <=  `InstVaild;
+                                end
+
                                 default:    begin
                                     
                                 end

@@ -1,8 +1,8 @@
 `include "precompiled.v"
 
 module openmips(
-    input wire clk,
-    input wire rst,
+    input   wire clk,
+    input   wire rst,
     
     input   wire[`RegBus]   rom_data_i,
     output  wire[`RegBus]   rom_addr_o, 
@@ -51,12 +51,12 @@ module openmips(
     wire[`RegBus]       wb_wdata_i;
 
     //*连接id与regfile
-    wire[`RegBus]        reg1_data;
-    wire[`RegBus]        reg2_data;
-    wire                 reg1_read;
-    wire                 reg2_read;
-    wire[`RegAddrBus]    reg1_addr;
-    wire[`RegAddrBus]    reg2_addr;
+    wire[`RegBus]       reg1_data;
+    wire[`RegBus]       reg2_data;
+    wire                reg1_read;
+    wire                reg2_read;
+    wire[`RegAddrBus]   reg1_addr;
+    wire[`RegAddrBus]   reg2_addr;
 
     //*实例化pc_reg
     pc_reg pc_reg0(
@@ -97,7 +97,14 @@ module openmips(
         .reg1_o(id_reg1_o),
         .reg2_o(id_reg2_o),
         .wd_o(id_wd_o),
-        .wreg(id_wreg_o)
+        .wreg(id_wreg_o),
+        //处理流水线数据冲突
+        .ex_wreg_i(ex_wreg_o),
+        .ex_wdata_i(ex_wdata_o),
+        .ex_wd_i(ex_wd_o),
+        .mem_wreg_i(mem_wreg_o),
+        .mem_wdata_i(mem_wdata_o),
+        .mem_wd_i(mem_wd_o)
     );
 
     //*实例化regfile

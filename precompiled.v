@@ -27,6 +27,9 @@
 `define InstInvaild     1'b1                //指令无效
 `define True_v          1'b1                //逻辑为真
 `define False_v         1'b0                //逻辑为假
+`define STOP            1'b1                //流水线停止信号
+`define NOSTOP          1'b0                //流水线继续信号
+`define CtrlBus         5:0                 //停止控制信号宽度
 
 //*指令码
 //逻辑运算指令

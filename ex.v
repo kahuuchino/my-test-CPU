@@ -3,6 +3,9 @@
 module ex(
     input wire rst,
 
+    //流水线暂停信号
+    output reg[`CtrlBus]    stallreq_from_ex,
+
     //译码得到的信息
     input wire[`AluOpBus]   aluop_i,
     input wire[`AluSelBus]  alusel_i,
@@ -31,6 +34,7 @@ module ex(
     output reg[`RegAddrBus] wd_o,
     output reg              wreg_o,
     output reg[`RegBus]     wdata_o
+
 );
 
     //保存逻辑运算的结果

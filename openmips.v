@@ -74,11 +74,17 @@ module openmips(
     wire[`RegBus]       hi;
     wire[`RegBus]       lo;
 
+    //*流水线控制信号
+    wire[`CtrlBus]      stall;
+    wire                stall_from_ex;
+    wire                stall_from_id;
+
 
     //*实例化pc_reg
     pc_reg pc_reg0(
         .clk(clk),
         .rst(rst),
+        .stall(stall),
         .pc(pc),
         .ce(rom_ce_o)
     );
@@ -89,6 +95,7 @@ module openmips(
     if_id if_id0(
         .clk(clk),
         .rst(rst),
+        .stall(stall),
         .if_pc(pc),
         .if_inst(rom_data_i),
         .id_pc(id_pc_i),
@@ -100,6 +107,7 @@ module openmips(
         .rst(rst),
         .pc_i(id_pc_i),
         .inst_i(id_inst_i),
+        .stall_from_id(stall_from_id),
         //来自regfile的输入
         .reg1_data_i(reg1_data),
         .reg2_data_i(reg2_data),
@@ -146,6 +154,7 @@ module openmips(
     id_ex id_ex0(
         .rst(rst),
         .clk(clk),
+        .stall(stall),
 
         .id_aluop(id_aluop_o),
         .id_alusel(id_alusel_o),
@@ -165,6 +174,7 @@ module openmips(
     //*实例化ex
     ex ex0(
         .rst(rst),
+        .stall_from_ex(stall_from_ex),
 
         .aluop_i(ex_aluop_i),
         .alusel_i(ex_alusel_i),
@@ -197,6 +207,7 @@ module openmips(
     ex_mem ex_mem0(
         .rst(rst),
         .clk(clk),
+        .stall(stall),
 
         .ex_wd(ex_wd_o),
         .ex_wreg(ex_wreg_o),
@@ -237,6 +248,7 @@ module openmips(
     mem_wb mem_wb0(
         .rst(rst),
         .clk(clk),
+        .stall(stall),
 
         .mem_wd(mem_wd_o),
         .mem_wreg(mem_wreg_o),
@@ -253,6 +265,7 @@ module openmips(
 		.wb_whilo(wb_whilo_i)
     );
 
+    //*实例化hi、lo特殊寄存器
     hilo_reg hilo_reg0(
         .rst(rst),
         .clk(clk),
@@ -263,6 +276,14 @@ module openmips(
 
         .hi_o(hi),
         .lo_o(lo)
+    );
+
+    //*实例化ctrl流水线控制模块
+    ctrl ctrl0(
+        .rst(rst),
+        .stall_from_ex(stall_from_ex),
+        .stall_from_id(stall_from_id),
+        .stall(stall)
     );
 
 endmodule

@@ -5,6 +5,9 @@ module id(
     input wire[`InstAddrBus]    pc_i,
     input wire[`InstBus]        inst_i,
 
+    //流水线暂停信号
+    output  reg[`CtrlBus]       stallreq_from_id
+
     //读取Regfile
     input wire[`RegBus]         reg1_data_i,
     input wire[`RegBus]         reg2_data_i,
@@ -33,6 +36,7 @@ module id(
     input   wire                mem_wreg_i,
     input   wire[`RegBus]       mem_wdata_i,
     input   wire[`RegAddrBus]   mem_wd_i
+
 );
 
 //取得指令码
@@ -47,6 +51,8 @@ module id(
 //指令是否有效标志码
     reg instvalid;
 
+//暂时设置为不暂停
+    assign stallreq = `NOSTOP;
 
 //对指令进行译码
     always @ (*)    begin

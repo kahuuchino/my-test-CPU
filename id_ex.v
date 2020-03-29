@@ -4,6 +4,9 @@ module id_ex(
     input wire  rst,
     input wire  clk,
 
+    //流水线暂停信号
+    input wire[`CtrlBus]    stall
+
     //从译码阶段传来的信息
     input wire[`AluOpBus]   id_aluop,
     input wire[`AluSelBus]  id_alusel,
@@ -19,6 +22,7 @@ module id_ex(
     output reg[`RegBus]     ex_reg2,
     output reg[`RegAddrBus] ex_wd,
     output reg              ex_wreg
+
 );
 
     always @ (posedge clk)  begin
@@ -29,7 +33,14 @@ module id_ex(
             ex_reg2     <=  `ZeroWord;
             ex_wd       <=  `NOPRegAddr;
             ex_wreg     <=  `WriteDisable;
-        end else begin
+        end else if(stall[2] == `STOP && stall[3] == `NOSTOP) begin
+            ex_aluop    <=  `EXE_NOP_OP;
+            ex_alusel   <=  `EXE_RES_NOP;
+            ex_reg1     <=  `ZeroWord;
+            ex_reg2     <=  `ZeroWord;
+            ex_wd       <=  `NOPRegAddr;
+            ex_wreg     <=  `WriteDisable;
+        end else if(stall[2] == `NOSTOP) begin
             ex_aluop    <=  id_aluop;
             ex_alusel   <=  id_alusel;
             ex_reg1     <=  id_reg1;

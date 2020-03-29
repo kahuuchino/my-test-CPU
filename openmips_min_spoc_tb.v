@@ -15,7 +15,7 @@ module openmips_min_spoc_tb();
     initial begin
         rst = `RstEnable;
         #195 rst = `RstDisable;
-        #1000 $stop;
+        #2000 $stop;
     end
 
     openmips_min_spoc openmips_min_spoc0(

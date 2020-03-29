@@ -9,7 +9,7 @@
 `define RegBus          31:0                //Regfile数据线宽度
 `define RegNum          32                  //32位寄存器的数量
 `define RegNumLog2      5                   //寻址寄存器地址宽度
-`define DoubleRegBus    64                  //乘法宽度
+`define DoubleRegBus    63:0                //乘法宽度
 `define NOPRegAddr      5'b00000
 
 //*全局信号定义
@@ -100,6 +100,10 @@
 `define EXE_MFLO_OP     8'b00010010
 `define EXE_MTLO_OP     8'b00010011
 
+`define EXE_ADD_OP      8'b00100000
+`define EXE_ADDU_OP     8'b00100001
+`define EXE_SUB_OP      8'b00100010
+`define EXE_SUBU_OP     8'b00100011
 
 `define EXE_AND_OP      8'b00100100
 `define EXE_OR_OP       8'b00100101
@@ -110,7 +114,19 @@
 `define EXE_XORI_OP     8'b01011011
 `define EXE_LUI_OP      8'b01011100
 
-`define EXE_SLL_OP      8'b01111100
+
+`define EXE_SLT_OP      8'b00101010
+`define EXE_SLTU_OP     8'b00101011
+`define EXE_ADDI_OP     8'b01010101
+`define EXE_SLTI_OP     8'b01010111
+`define EXE_SLTIU_OP    8'b01011000   
+`define EXE_ADDIU_OP    8'b01010110
+`define EXE_CLZ_OP      8'b10110000
+`define EXE_CLO_OP      8'b10110001
+
+`define EXE_MULT_OP     8'b00011000
+`define EXE_MULTU_OP    8'b00011001
+`define EXE_MUL_OP      8'b10101001
 
 `define EXE_NOP_OP      8'b00000000
 

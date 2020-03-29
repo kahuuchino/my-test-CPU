@@ -18,4 +18,4 @@ module inst_rom(
         end
     end
 
-endmodule   
+endmodule
